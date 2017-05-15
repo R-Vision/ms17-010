@@ -642,6 +642,39 @@ function Invoke-IPv4NetworkScan
                 $IncludeSMB
             )
 
+            # $KB = '4012598|4012212|4012215|4012214|4012217|4012213|4012216|4013429|4012606|4013198';
+            # $KB = '4012212|4012213|4012214|4012215|4012216|4012217|4012598|4012606|4013198|4013429|4015550|4015551|4015549|4018466|4019215|4019216|4019264|4019472|4019473|4019474';
+
+            $KB = @()
+
+            $KB += "4012212" # Security only update for Windows 7 and Windows Server 2008 R2
+            $KB += "4012213" # Security only update for Windows 8.1 and Windows Server 2012 R2
+            $KB += "4012214" # Security only update for Windows Server 2012
+            $KB += "4012215" # Monthly rollup (March 2017) for Windows 7 and Windows Server 2008 R2
+            $KB += "4012216" # Monthly rollup (March 2017) for Windows 8.1 and Windows RT 8.1 and Windows Server 2012 R2
+            $KB += "4012217" # Monthly rollup (March 2017) for Windows 8 and Windows Server 2012
+            $KB += "4012598" # Windows Vista and Windows Server 2008
+            $KB += "4012606" # Cumulative update (March 14, 2017) for Windows 10
+            $KB += "4013198" # Cumulative update (March 14, 2017) for Windows 10 1511
+            $KB += "4013429" # Cumulative update (March 14, 2017) for Windows 10 1607
+            $KB += "4015217" # Cumulative update (April 11, 2017) for Windows 10 1607
+            $KB += "4015219" # Cumulative update (April 11, 2017) for Windows 10 1511
+            $KB += "4015221" # Cumulative update (April 11, 2017) for Windows 10
+            $KB += "4015438" # Cumulative update (March 20, 2017) for Windows 10 1607
+            $KB += "4015549" # Monthly rollup (April 2017) for Windows 7 and Windows Server 2008 R2
+            $KB += "4015550" # Monthly rollup (April 2017) for Windows 8.1 and Windows Server 2012 R2
+            $KB += "4015551" # Monthly rollup (April 2017) for Windows 8 and Windows Server 2012
+            $KB += "4016635" # Cumulative update (March 22, 2017) for Windows 10 1607
+            $KB += "4016636" # Cumulative update (March 22, 2017) for Windows 10 1511
+            $KB += "4016637" # Cumulative update (March 22, 2017) for Windows 10
+            $KB += "4016871" # Cumulative update (May 9, 2017) for Windows 10 1703
+            $KB += "4019215" # Monthly rollup (May 2017) for Windows 8.1 and Windows Server 2012 R2
+            $KB += "4019216" # Monthly rollup (May 2017) for Windows 8 and Windows Server 2012
+            $KB += "4019264" # Monthly rollup (May 2017) for Windows 7 and Windows Server 2008 R2
+            $KB += "4019472" # Cumulative update (May 9, 2017) for Windows 10 1607
+            $KB += "4019473" # Cumulative update (May 9, 2017) for Windows 10 1511
+            $KB += "4019474" # Cumulative update (May 9, 2017) for Windows 10
+
             # +++ Send ICMP requests +++
             $Status = [String]::Empty
 
@@ -712,7 +745,7 @@ function Invoke-IPv4NetworkScan
 
                     Foreach ($item in $QFE)
                     {
-                        $result = $item.HotfixID -match "4012598|4012212|4012215|4012214|4012217|4012213|4012216|4013429|4012606|4013198"
+                        $result = $item.HotfixID -match [String]::Join("|", $KB)
 
                         if ($result)
                         {
@@ -797,7 +830,7 @@ function Invoke-IPv4NetworkScan
 
                 Foreach ($item in $Updates)
                 {
-                    $result = $item.KB -match "4012598|4012212|4012215|4012214|4012217|4012213|4012216|4013429|4012606|4013198"
+                    $result = $item.KB -match [String]::Join("|", $KB)
 
                     if ($result)
                     {
