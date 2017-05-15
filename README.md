@@ -26,10 +26,10 @@ Foreach ($item in $Updates) {
 }
 ```
 
-### ms17010.ps1
-Изложенные выше способы проверки наличия установленного обновления MS17-010 были использованы при написании скрипта ms17010.ps1. Для удаленного подключения к службе WMI используется команда [Get-WmiObject](https://msdn.microsoft.com/en-us/powershell/reference/5.1/microsoft.powershell.management/get-wmiobject), а для удаленного подключения к локальной службе Windows Update используется [Windows Remote Management (WinRM)](https://msdn.microsoft.com/ru-ru/library/aa384426(v=vs.85).aspx). Если на удаленном узле не сконфигурирована служба WinRM, то проверка осуществляется только через WMI. Функции сканирования сети была заимствованы из пакета [LazyAdmin](https://github.com/BornToBeRoot/PowerShell).
+### rvision-ms17010.ps1
+Изложенные выше способы проверки наличия установленного обновления MS17-010 были использованы при написании скрипта rvision-ms17010.ps1. Для удаленного подключения к службе WMI используется команда [Get-WmiObject](https://msdn.microsoft.com/en-us/powershell/reference/5.1/microsoft.powershell.management/get-wmiobject), а для удаленного подключения к локальной службе Windows Update используется [Windows Remote Management (WinRM)](https://msdn.microsoft.com/ru-ru/library/aa384426(v=vs.85).aspx). Если на удаленном узле не сконфигурирована служба WinRM, то проверка осуществляется только через WMI. Функции сканирования сети была заимствованы из пакета [LazyAdmin](https://github.com/BornToBeRoot/PowerShell).
 
-##### Использование ms17010.ps1
+##### Использование rvision-ms17010.ps1
 
 1. Сканирует заданную сеть на наличие установленного обновления MS17-010 с использованием текущей учетной записи пользователя.
 ```powershell
