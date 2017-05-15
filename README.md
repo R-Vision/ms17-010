@@ -15,12 +15,42 @@ wmic qfe get HotFixID | findstr /c:4012212 /c:4012213 /c:4012214 /c:4012215 /c:4
 ##### 2. Проверка через обращение к службе Windows Update (PowerShell)
 
 ```powershell
+$KB = @()
+
+$KB += "4012212" # Security only update for Windows 7 and Windows Server 2008 R2
+$KB += "4012213" # Security only update for Windows 8.1 and Windows Server 2012 R2
+$KB += "4012214" # Security only update for Windows Server 2012
+$KB += "4012215" # Monthly rollup (March 2017) for Windows 7 and Windows Server 2008 R2
+$KB += "4012216" # Monthly rollup (March 2017) for Windows 8.1 and Windows RT 8.1 and Windows Server 2012 R2
+$KB += "4012217" # Monthly rollup (March 2017) for Windows 8 and Windows Server 2012
+$KB += "4012598" # Other old Windows versions https://blogs.technet.microsoft.com/msrc/2017/05/12/customer-guidance-for-wannacrypt-attacks/
+$KB += "4012606" # Cumulative update (March 14, 2017) for Windows 10
+$KB += "4013198" # Cumulative update (March 14, 2017) for Windows 10 1511
+$KB += "4013429" # Cumulative update (March 14, 2017) for Windows 10 1607
+$KB += "4015217" # Cumulative update (April 11, 2017) for Windows 10 1607
+$KB += "4015219" # Cumulative update (April 11, 2017) for Windows 10 1511
+$KB += "4015221" # Cumulative update (April 11, 2017) for Windows 10
+$KB += "4015438" # Cumulative update (March 20, 2017) for Windows 10 1607
+$KB += "4015549" # Monthly rollup (April 2017) for Windows 7 and Windows Server 2008 R2
+$KB += "4015550" # Monthly rollup (April 2017) for Windows 8.1 and Windows Server 2012 R2
+$KB += "4015551" # Monthly rollup (April 2017) for Windows 8 and Windows Server 2012
+$KB += "4016635" # Cumulative update (March 22, 2017) for Windows 10 1607
+$KB += "4016636" # Cumulative update (March 22, 2017) for Windows 10 1511
+$KB += "4016637" # Cumulative update (March 22, 2017) for Windows 10
+$KB += "4016871" # Cumulative update (May 9, 2017) for Windows 10 1703
+$KB += "4019215" # Monthly rollup (May 2017) for Windows 8.1 and Windows Server 2012 R2
+$KB += "4019216" # Monthly rollup (May 2017) for Windows 8 and Windows Server 2012
+$KB += "4019264" # Monthly rollup (May 2017) for Windows 7 and Windows Server 2008 R2
+$KB += "4019472" # Cumulative update (May 9, 2017) for Windows 10 1607
+$KB += "4019473" # Cumulative update (May 9, 2017) for Windows 10 1511
+$KB += "4019474" # Cumulative update (May 9, 2017) for Windows 10
+
 $Session = New-Object -ComObject Microsoft.Update.Session
 $Searcher = $Session.CreateUpdateSearcher()
 $HistoryCount = $Searcher.GetTotalHistoryCount()
 $Updates = $Searcher.QueryHistory(0, $HistoryCount)
 Foreach ($item in $Updates) {
-    if ($item.Title -match "4012212|4012213|4012214|4012215|4012216|4012217|4012598|4012606|4013198|4013429") {
+    if ($item.Title -match [String]::Join("|", $KB)) {
         Write-Host 'MS17-010 installed'
     }
 }
