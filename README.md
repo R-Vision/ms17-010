@@ -72,7 +72,7 @@ IPv4Address               Hotfix                        SMBv1                   
 .\rvision-ms17010.ps1 -StartIPv4Address 10.0.0.0 -EndIPv4Address 10.0.0.254 -UseCredentials -IncludeWinRM
 ```
 
-##### Ошибки в процессе выполнения скрипта
+##### Возможные ошибки в процессе выполнения скрипта
 
 ```
 .\rvision-ms17010.ps1 : File C:\ms17-010-master\rvision-ms17010.ps1 cannot be loaded. The file C:\ms17-010-master\rvisi
