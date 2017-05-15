@@ -3,7 +3,7 @@
     Convert a subnetmask to CIDR and vise versa
     .DESCRIPTION
     Convert a subnetmask like 255.255.255 to CIDR (/24) and vise versa.
-                
+
     .EXAMPLE
     Convert-Subnetmask -CIDR 24
     Mask          CIDR
@@ -14,7 +14,7 @@
     Mask        CIDR
     ----        ----
     255.255.0.0   16
-    
+
     .LINK
     https://github.com/BornToBeRoot/PowerShell/blob/master/Documentation/Function/Convert-Subnetmask.README.md
 #>
@@ -91,9 +91,9 @@ function Convert-Subnetmask
     Convert an IPv4-Address to Int64 and vise versa
     .DESCRIPTION
     Convert an IPv4-Address to Int64 and vise versa. The result will contain the IPv4-Address as string and Tnt64.
-    
+
     .EXAMPLE
-    Convert-IPv4Address -IPv4Address "192.168.0.1"   
+    Convert-IPv4Address -IPv4Address "192.168.0.1"
     IPv4Address      Int64
     -----------      -----
     192.168.0.1 3232235521
@@ -160,14 +160,14 @@ function Convert-IPv4Address
     Calculate a subnet based on an IP-Address and the subnetmask or CIDR
     .DESCRIPTION
     Calculate a subnet based on an IP-Address within the subnet and the subnetmask or CIDR. The result includes the NetworkID, Broadcast, total available IPs and usable IPs for hosts.
-                
+
     .EXAMPLE
     Get-IPv4Subnet -IPv4Address 192.168.24.96 -CIDR 27
-    
+
     NetworkID     Broadcast      IPs Hosts
     ---------     ---------      --- -----
     192.168.24.96 192.168.24.127  32    30
-            
+
     .EXAMPLE
     Get-IPv4Subnet -IPv4Address 192.168.1.0 -Mask 255.255.255.0 | Select-Object -Property *
     NetworkID : 192.168.1.0
@@ -421,7 +421,12 @@ function Invoke-IPv4NetworkScan
         [Parameter(
             Position=10,
             HelpMessage='Show WinRM status')]
-        [Switch]$IncludeWinRM
+        [Switch]$IncludeWinRM,
+
+        [Parameter(
+            Position=11,
+            HelpMessage='Show SMB status')]
+        [Switch]$IncludeSMB
     )
 
     Begin{
@@ -584,6 +589,11 @@ function Invoke-IPv4NetworkScan
         $PropertiesToDisplay = @()
         $PropertiesToDisplay += "IPv4Address", "Hotfix"
 
+        if ($IncludeSMB -eq $true)
+        {
+            $PropertiesToDisplay += "SMBv1"
+        }
+
         if ($IncludeWinRM -eq $true)
         {
             $PropertiesToDisplay += "WinRM"
@@ -628,7 +638,8 @@ function Invoke-IPv4NetworkScan
                 $ExtendedInformations,
                 $IncludeInactive,
                 $UseCredentials,
-                $Credential
+                $Credential,
+                $IncludeSMB
             )
 
             # +++ Send ICMP requests +++
@@ -801,6 +812,36 @@ function Invoke-IPv4NetworkScan
                 $WinRM = 'Access denied'
             }
 
+            # +++ SMB status +++
+            $SMBv1 = [String]::Empty
+
+            if ($IncludeSMB -eq $true)
+            {
+                try {
+                    if ($Credential)
+                    {
+                        $SC = Invoke-WmiMethod -Namespace "Root\Microsoft\Windows\SMB" -Class "MSFT_SmbServerConfiguration" -Name "GetConfiguration" -ComputerName $IPv4Address -Credential $Credential
+                    }
+                    else
+                    {
+                        $SC = Invoke-WmiMethod -Namespace "Root\Microsoft\Windows\SMB" -Class "MSFT_SmbServerConfiguration" -Name "GetConfiguration" -ComputerName $IPv4Address
+                    }
+
+                    if ($SC.Output.EnableSMB1Protocol -eq $true)
+                    {
+                        $SMBv1 = "*** ENABLED ***"
+                    }
+
+                    if ($SC.Output.EnableSMB1Protocol -eq $false) {
+                        $SMBv1 = "Disabled"
+                    }
+                }
+                catch
+                {
+                    $SMBv1 = 'Error'
+                }
+            }
+
             # +++ Get MAC-Address +++
             $MAC = [String]::Empty
 
@@ -857,6 +898,7 @@ function Invoke-IPv4NetworkScan
                     BufferSize = $BufferSize
                     ResponseTime = $ResponseTime
                     TTL = $TTL
+                    SMBv1 = $SMBv1
                 }
             }
             else
@@ -890,6 +932,7 @@ function Invoke-IPv4NetworkScan
                 IncludeInactive = $IncludeInactive
                 UseCredentials = $UseCredentials
                 Credential = $Credential
+                IncludeSMB = $IncludeSMB
             }
 
             # Catch when trying to divide through zero
