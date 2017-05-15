@@ -39,28 +39,32 @@ Foreach ($item in $Updates) {
 ```powershell
 .\rvision-ms17010.ps1 -StartIPv4Address 10.0.0.0 -EndIPv4Address 10.0.0.254 -UseCredentials
 ```
+3. Для отображения информации о том, включен ли протокол SMBv1 на удаленном хосте, добавьте аргумент -IncludeSMB
+```powershell
+.\rvision-ms17010.ps1 -StartIPv4Address 10.0.0.0 -EndIPv4Address 10.0.0.254 -UseCredentials -IncludeSMB
+```
 
 Пример использования скрипта:
 ```powershell
-PS C:\> .\rvision-ms17010.ps1 -StartIPv4Address 10.0.0.0 -EndIPv4Address 10.0.0.254 -UseCredentials
+PS C:\> .\rvision-ms17010.ps1 -StartIPv4Address 10.0.0.0 -EndIPv4Address 10.0.0.254 -UseCredentials -IncludeSMB
 
-IPv4Address                         Hotfix                                  Hostname
------------                         ------                                  --------
-10.0.0.2                            Ok                                      dc1.int.lan
-10.0.0.3                            *** NOT INSTALLED ***                   dc2.int.lan
-10.0.0.5                            Ok                                      sqldb.int.lan
-10.0.0.12                           *** NOT INSTALLED ***                   si.int.lan
-10.0.0.15                           *** NOT INSTALLED ***                   sp.int.lan
-10.0.0.16                           *** NOT INSTALLED ***                   siem.int.lan
-10.0.0.254                          *** NOT INSTALLED ***                   WIN2K12R2EN
-10.0.0.246                          *** NOT INSTALLED ***                   WIN10EN32
-10.0.0.247                          *** NOT INSTALLED ***                   WIN10EN64
-10.0.0.245                          Ok                                      WIN10RU64
-10.0.0.4                            *** NOT INSTALLED ***                   mail.int.lan
-10.0.0.241                          *** NOT INSTALLED ***                   WIN7RU32
-10.0.0.242                          Ok                                      WIN7EN32
-10.0.0.14                           Ok                                      fp.int.lan
-10.0.0.235                          *** NOT INSTALLED ***                   WIN8EN64
+IPv4Address               Hotfix                        SMBv1                         Hostname
+-----------               ------                        -----                         --------
+10.0.0.2                  Ok                            Disabled                      dc1.int.lan
+10.0.0.3                  *** NOT INSTALLED ***         Disabled                      dc2.int.lan
+10.0.0.4                  *** NOT INSTALLED ***         Disabled                      mail.int.lan
+10.0.0.5                  Ok                            Disabled                      sqldb.int.lan
+10.0.0.12                 *** NOT INSTALLED ***         *** ENABLED ***               si.int.lan
+10.0.0.14                 Ok                            *** ENABLED ***               fp.int.lan
+10.0.0.15                 *** NOT INSTALLED ***         *** ENABLED ***               sp.int.lan
+10.0.0.16                 *** NOT INSTALLED ***         *** ENABLED ***               siem.int.lan
+10.0.0.235                *** NOT INSTALLED ***         *** ENABLED ***               WIN8EN64
+10.0.0.241                *** NOT INSTALLED ***                                       WIN7RU32
+10.0.0.242                Ok                                                          WIN7EN32
+10.0.0.245                Ok                            *** ENABLED ***               WIN10RU64
+10.0.0.246                *** NOT INSTALLED ***         *** ENABLED ***               WIN10EN32
+10.0.0.247                *** NOT INSTALLED ***         *** ENABLED ***               WIN10EN64
+10.0.0.254                *** NOT INSTALLED ***         *** ENABLED ***               WIN2K12R2EN
 ```
 
 Чтобы отобразить статус подключения к службе WinRM, необходимо добавить аргумент -IncludeWinRM
