@@ -653,7 +653,7 @@ function Invoke-IPv4NetworkScan
             $KB += "4012215" # Monthly rollup (March 2017) for Windows 7 and Windows Server 2008 R2
             $KB += "4012216" # Monthly rollup (March 2017) for Windows 8.1 and Windows RT 8.1 and Windows Server 2012 R2
             $KB += "4012217" # Monthly rollup (March 2017) for Windows 8 and Windows Server 2012
-            $KB += "4012598" # Windows Vista and Windows Server 2008
+            $KB += "4012598" # Other old Windows versions https://blogs.technet.microsoft.com/msrc/2017/05/12/customer-guidance-for-wannacrypt-attacks/
             $KB += "4012606" # Cumulative update (March 14, 2017) for Windows 10
             $KB += "4013198" # Cumulative update (March 14, 2017) for Windows 10 1511
             $KB += "4013429" # Cumulative update (March 14, 2017) for Windows 10 1607
